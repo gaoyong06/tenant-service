@@ -4,16 +4,16 @@ import (
 	"context"
 	"time"
 
-	pb "github.com/gaoyong06/middleground/proto-repo/gen/go/platform/tenant_service/v1"
-	"github.com/gaoyong06/middleground/tenant-service/internal/biz"
 	"github.com/go-kratos/kratos/v2/log"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	pb "tenant-service/api/tenant_service/v1"
+	"tenant-service/internal/biz"
 )
 
 // TenantService is a tenant service.
 type TenantService struct {
-	pb.UnimplementedTenantServiceServer
+	pb.UnimplementedTenantServer
 
 	tu  *biz.TenantUsecase
 	qu  *biz.QuotaUsecase
@@ -90,12 +90,12 @@ func convertLimitTypeToEnum(limitType pb.LimitType) biz.LimitType {
 }
 
 // convertTenantToPB converts tenant from biz to proto
-func convertTenantToPB(tenant *biz.Tenant) *pb.Tenant {
+func convertTenantToPB(tenant *biz.Tenant) *pb.TenantInfo {
 	if tenant == nil {
 		return nil
 	}
 
-	return &pb.Tenant{
+	return &pb.TenantInfo{
 		TenantId:       tenant.TenantID,
 		TenantName:     tenant.TenantName,
 		TenantType:     convertTenantTypeToProto(tenant.TenantType),
@@ -211,7 +211,7 @@ func (s *TenantService) ListTenants(ctx context.Context, req *pb.ListTenantsRequ
 	}
 
 	// Convert to proto response
-	pbTenants := make([]*pb.Tenant, 0, len(tenants))
+	pbTenants := make([]*pb.TenantInfo, 0, len(tenants))
 	for _, tenant := range tenants {
 		pbTenants = append(pbTenants, convertTenantToPB(tenant))
 	}

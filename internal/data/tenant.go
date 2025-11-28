@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gaoyong06/middleground/tenant-service/internal/biz"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"tenant-service/internal/biz"
 )
 
 // TenantModel 租户数据模型
@@ -30,17 +30,17 @@ func (TenantModel) TableName() string {
 
 // ChannelModel 渠道扩展数据模型
 type ChannelModel struct {
-	ChannelID     int64     `gorm:"column:channel_id;primaryKey;autoIncrement"`
-	TenantID      string    `gorm:"column:tenant_id;uniqueIndex;not null"`
-	ChannelCode   string    `gorm:"column:channel_code;uniqueIndex;not null"`
-	ChannelName   string    `gorm:"column:channel_name;not null"`
-	ContactName   string    `gorm:"column:contact_name"`
-	ContactPhone  string    `gorm:"column:contact_phone"`
+	ChannelID      int64     `gorm:"column:channel_id;primaryKey;autoIncrement"`
+	TenantID       string    `gorm:"column:tenant_id;uniqueIndex;not null"`
+	ChannelCode    string    `gorm:"column:channel_code;uniqueIndex;not null"`
+	ChannelName    string    `gorm:"column:channel_name;not null"`
+	ContactName    string    `gorm:"column:contact_name"`
+	ContactPhone   string    `gorm:"column:contact_phone"`
 	CommissionRate float64   `gorm:"column:commission_rate"`
-	SalesTarget   float64   `gorm:"column:sales_target"`
-	ExtraData     string    `gorm:"column:extra_data;type:json"`
-	CreatedAt     time.Time `gorm:"column:created_at;autoCreateTime"`
-	UpdatedAt     time.Time `gorm:"column:updated_at;autoUpdateTime"`
+	SalesTarget    float64   `gorm:"column:sales_target"`
+	ExtraData      string    `gorm:"column:extra_data;type:json"`
+	CreatedAt      time.Time `gorm:"column:created_at;autoCreateTime"`
+	UpdatedAt      time.Time `gorm:"column:updated_at;autoUpdateTime"`
 }
 
 // TableName 表名

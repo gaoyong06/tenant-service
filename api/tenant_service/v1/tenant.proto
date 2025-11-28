@@ -1,0 +1,271 @@
+syntax = "proto3";
+
+package platform.tenant_service.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "base/error.proto";
+import "base/pagination.proto";
+
+option go_package = "tenant-service/api/tenant_service/v1;v1";
+
+// TenantService 租户服务API
+service Tenant {
+  // CreateTenant 创建租户
+  rpc CreateTenant(CreateTenantRequest) returns (CreateTenantReply) {
+    option (google.api.http) = {
+      post: "/v1/tenants"
+      body: "*"
+    };
+  }
+
+  // GetTenant 获取租户信息
+  rpc GetTenant(GetTenantRequest) returns (GetTenantReply) {
+    option (google.api.http) = {
+      get: "/v1/tenants/{tenant_id}"
+    };
+  }
+
+  // ListTenants 列出租户
+  rpc ListTenants(ListTenantsRequest) returns (ListTenantsReply) {
+    option (google.api.http) = {
+      get: "/v1/tenants"
+    };
+  }
+
+  // UpdateTenant 更新租户
+  rpc UpdateTenant(UpdateTenantRequest) returns (UpdateTenantReply) {
+    option (google.api.http) = {
+      put: "/v1/tenants/{tenant_id}"
+      body: "*"
+    };
+  }
+
+  // DeleteTenant 删除租户
+  rpc DeleteTenant(DeleteTenantRequest) returns (DeleteTenantReply) {
+    option (google.api.http) = {
+      delete: "/v1/tenants/{tenant_id}"
+    };
+  }
+
+  // CheckQuota 检查配额
+  rpc CheckQuota(CheckQuotaRequest) returns (CheckQuotaReply) {
+    option (google.api.http) = {
+      post: "/v1/tenants/{tenant_id}/quota/check"
+      body: "*"
+    };
+  }
+
+  // ConsumeQuota 消费配额
+  rpc ConsumeQuota(ConsumeQuotaRequest) returns (ConsumeQuotaReply) {
+    option (google.api.http) = {
+      post: "/v1/tenants/{tenant_id}/quota/consume"
+      body: "*"
+    };
+  }
+
+  // ReleaseQuota 释放配额
+  rpc ReleaseQuota(ReleaseQuotaRequest) returns (ReleaseQuotaReply) {
+    option (google.api.http) = {
+      post: "/v1/tenants/{tenant_id}/quota/release"
+      body: "*"
+    };
+  }
+
+  // ListProducts 列出产品线
+  rpc ListProducts(ListProductsRequest) returns (ListProductsReply) {
+    option (google.api.http) = {
+      get: "/v1/products"
+    };
+  }
+}
+
+// TenantInfo 租户信息
+message TenantInfo {
+  string tenant_id = 1;                // 租户ID
+  string tenant_name = 2;              // 租户名称
+  TenantType tenant_type = 3;          // 租户类型
+  string parent_tenant_id = 4;         // 父租户ID
+  bool status = 5;                     // 状态
+  map<string, string> quota_config = 6; // 配额配置
+  string created_at = 7;               // 创建时间
+  string updated_at = 8;               // 更新时间
+}
+
+// 租户类型枚举
+enum TenantType {
+  TENANT_TYPE_UNSPECIFIED = 0;
+  TENANT_TYPE_PLATFORM = 1;    // 平台
+  TENANT_TYPE_CHANNEL = 2;     // 渠道
+  TENANT_TYPE_ENTERPRISE = 3;  // 企业
+}
+
+// 配额类型枚举
+enum QuotaType {
+  QUOTA_TYPE_UNSPECIFIED = 0;
+  QUOTA_TYPE_MARKETING_CAMPAIGN = 1; // 营销活动
+  QUOTA_TYPE_REDEEM_CODE = 2;        // 兑换码
+  QUOTA_TYPE_SMS = 3;                // 短信
+}
+
+// 限制类型枚举
+enum LimitType {
+  LIMIT_TYPE_UNSPECIFIED = 0;
+  LIMIT_TYPE_DAILY = 1;       // 每日
+  LIMIT_TYPE_MONTHLY = 2;     // 每月
+  LIMIT_TYPE_TOTAL = 3;       // 总量
+  LIMIT_TYPE_CONCURRENT = 4;  // 并发
+}
+
+// 操作类型枚举
+enum OperationType {
+  OPERATION_TYPE_UNSPECIFIED = 0;
+  OPERATION_TYPE_CONSUME = 1;  // 消费
+  OPERATION_TYPE_RELEASE = 2;  // 释放
+  OPERATION_TYPE_ADJUST = 3;   // 调整
+}
+
+// QuotaInfo 配额信息
+message QuotaInfo {
+  int64 quota_id = 1;              // 配额ID
+  string tenant_id = 2;            // 租户ID
+  QuotaType quota_type = 3;        // 配额类型
+  LimitType limit_type = 4;        // 限制类型
+  int32 hard_limit = 5;            // 硬限制
+  int32 soft_limit = 6;            // 软限制
+  int32 used_count = 7;            // 已使用数量
+  string reset_time = 8;           // 重置时间
+  string next_reset_time = 9;      // 下次重置时间
+  string effective_time = 10;      // 生效时间
+  string expire_time = 11;         // 过期时间
+  bool is_global = 12;             // 是否全局
+  repeated string product_codes = 13; // 产品代码列表
+}
+
+// Product 产品信息
+message Product {
+  string product_code = 1;  // 产品代码
+  string product_name = 2;  // 产品名称
+  string description = 3;   // 描述
+}
+
+// CreateTenantRequest 创建租户请求
+message CreateTenantRequest {
+  string tenant_name = 1 [(validate.rules).string = {min_len: 1, max_len: 64}];  // 租户名称
+  TenantType tenant_type = 2 [(validate.rules).enum.defined_only = true];         // 租户类型
+  string parent_tenant_id = 3;                                                     // 父租户ID
+  map<string, string> quota_config = 4;                                            // 配额配置
+}
+
+// CreateTenantReply 创建租户响应
+message CreateTenantReply {
+  TenantInfo tenant = 1;  // 租户信息
+}
+
+// GetTenantRequest 获取租户请求
+message GetTenantRequest {
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];  // 租户ID
+}
+
+// GetTenantReply 获取租户响应
+message GetTenantReply {
+  TenantInfo tenant = 1;  // 租户信息
+}
+
+// ListTenantsRequest 列出租户请求
+message ListTenantsRequest {
+  TenantType tenant_type = 1;  // 租户类型
+  string parent_tenant_id = 2; // 父租户ID
+  bool status = 3;             // 状态
+  int32 page_size = 4;         // 页大小
+  int32 page_num = 5;          // 页码
+}
+
+// ListTenantsReply 列出租户响应
+message ListTenantsReply {
+  repeated TenantInfo tenants = 1;  // 租户列表
+  int32 total = 2;              // 总数
+}
+
+// UpdateTenantRequest 更新租户请求
+message UpdateTenantRequest {
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];                     // 租户ID
+  string tenant_name = 2 [(validate.rules).string = {min_len: 1, max_len: 64}];    // 租户名称
+  bool status = 3;                                                                 // 状态
+  map<string, string> quota_config = 4;                                            // 配额配置
+}
+
+// UpdateTenantReply 更新租户响应
+message UpdateTenantReply {
+  TenantInfo tenant = 1;  // 租户信息
+}
+
+// DeleteTenantRequest 删除租户请求
+message DeleteTenantRequest {
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];  // 租户ID
+}
+
+// DeleteTenantReply 删除租户响应
+message DeleteTenantReply {
+  bool success = 1;  // 是否成功
+}
+
+// CheckQuotaRequest 检查配额请求
+message CheckQuotaRequest {
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];           // 租户ID
+  QuotaType quota_type = 2 [(validate.rules).enum.defined_only = true]; // 配额类型
+  LimitType limit_type = 3 [(validate.rules).enum.defined_only = true]; // 限制类型
+  string product_code = 4;                                              // 产品代码
+}
+
+// CheckQuotaReply 检查配额响应
+message CheckQuotaReply {
+  QuotaInfo quota = 1;        // 配额信息
+  bool has_quota = 2;         // 是否有配额
+  int32 available_quota = 3;  // 可用配额
+}
+
+// ConsumeQuotaRequest 消费配额请求
+message ConsumeQuotaRequest {
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];           // 租户ID
+  QuotaType quota_type = 2 [(validate.rules).enum.defined_only = true]; // 配额类型
+  LimitType limit_type = 3 [(validate.rules).enum.defined_only = true]; // 限制类型
+  int32 amount = 4 [(validate.rules).int32.gt = 0];                    // 数量
+  string product_code = 5;                                              // 产品代码
+  string biz_id = 6;                                                    // 业务ID
+  string biz_type = 7;                                                  // 业务类型
+}
+
+// ConsumeQuotaReply 消费配额响应
+message ConsumeQuotaReply {
+  bool success = 1;           // 是否成功
+  int32 remaining_quota = 2;  // 剩余配额
+  string message = 3;         // 消息
+}
+
+// ReleaseQuotaRequest 释放配额请求
+message ReleaseQuotaRequest {
+  string tenant_id = 1 [(validate.rules).string.min_len = 1];           // 租户ID
+  QuotaType quota_type = 2 [(validate.rules).enum.defined_only = true]; // 配额类型
+  LimitType limit_type = 3 [(validate.rules).enum.defined_only = true]; // 限制类型
+  int32 amount = 4 [(validate.rules).int32.gt = 0];                    // 数量
+  string product_code = 5;                                              // 产品代码
+  string biz_id = 6;                                                    // 业务ID
+}
+
+// ReleaseQuotaReply 释放配额响应
+message ReleaseQuotaReply {
+  bool success = 1;           // 是否成功
+  int32 remaining_quota = 2;  // 剩余配额
+  string message = 3;         // 消息
+}
+
+// ListProductsRequest 列出产品线请求
+message ListProductsRequest {
+  string tenant_id = 1;  // 租户ID
+}
+
+// ListProductsReply 列出产品线响应
+message ListProductsReply {
+  repeated Product products = 1;  // 产品列表
+}

@@ -7,13 +7,13 @@
 package main
 
 import (
-	"github.com/gaoyong06/middleground/tenant-service/internal/biz"
-	"github.com/gaoyong06/middleground/tenant-service/internal/conf"
-	"github.com/gaoyong06/middleground/tenant-service/internal/data"
-	"github.com/gaoyong06/middleground/tenant-service/internal/server"
-	"github.com/gaoyong06/middleground/tenant-service/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"tenant-service/internal/biz"
+	"tenant-service/internal/conf"
+	"tenant-service/internal/data"
+	"tenant-service/internal/server"
+	"tenant-service/internal/service"
 )
 
 // Injectors from wire.go:

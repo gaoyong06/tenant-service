@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gaoyong06/middleground/tenant-service/internal/biz"
 	"github.com/go-kratos/kratos/v2/log"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"tenant-service/internal/biz"
 )
 
 // QuotaModel 配额数据模型

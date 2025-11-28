@@ -522,7 +522,7 @@ const file_internal_conf_conf_proto_rawDesc = "" +
 	"\fread_timeout\x18\x06 \x01(\v2\x19.google.protobuf.DurationR\vreadTimeout\x12>\n" +
 	"\rwrite_timeout\x18\a \x01(\v2\x19.google.protobuf.DurationR\fwriteTimeout\x12\x1b\n" +
 	"\tpool_size\x18\b \x01(\x05R\bpoolSize\x12$\n" +
-	"\x0emin_idle_conns\x18\t \x01(\x05R\fminIdleConnsBEZCgithub.com/gaoyong06/middleground/tenant-service/internal/conf;confb\x06proto3"
+	"\x0emin_idle_conns\x18\t \x01(\x05R\fminIdleConnsBEZCtenant-service/internal/conf;confb\x06proto3"
 
 var (
 	file_internal_conf_conf_proto_rawDescOnce sync.Once

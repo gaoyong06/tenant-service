@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gaoyong06/middleground/tenant-service/internal/biz"
 	"github.com/go-kratos/kratos/v2/log"
 	"gorm.io/gorm"
+	"tenant-service/internal/biz"
 )
 
 // ProductModel 产品数据模型
