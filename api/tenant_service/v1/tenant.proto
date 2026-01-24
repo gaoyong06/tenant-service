@@ -14,7 +14,7 @@ service Tenant {
   // CreateTenant 创建租户
   rpc CreateTenant(CreateTenantRequest) returns (CreateTenantReply) {
     option (google.api.http) = {
-      post: "/v1/tenants"
+      post: "/tenant/v1/tenants"
       body: "*"
     };
   }
@@ -22,21 +22,21 @@ service Tenant {
   // GetTenant 获取租户信息
   rpc GetTenant(GetTenantRequest) returns (GetTenantReply) {
     option (google.api.http) = {
-      get: "/v1/tenants/{tenant_id}"
+      get: "/tenant/v1/tenants/{tenant_id}"
     };
   }
 
   // ListTenants 列出租户
   rpc ListTenants(ListTenantsRequest) returns (ListTenantsReply) {
     option (google.api.http) = {
-      get: "/v1/tenants"
+      get: "/tenant/v1/tenants"
     };
   }
 
   // UpdateTenant 更新租户
   rpc UpdateTenant(UpdateTenantRequest) returns (UpdateTenantReply) {
     option (google.api.http) = {
-      put: "/v1/tenants/{tenant_id}"
+      put: "/tenant/v1/tenants/{tenant_id}"
       body: "*"
     };
   }
@@ -44,14 +44,14 @@ service Tenant {
   // DeleteTenant 删除租户
   rpc DeleteTenant(DeleteTenantRequest) returns (DeleteTenantReply) {
     option (google.api.http) = {
-      delete: "/v1/tenants/{tenant_id}"
+      delete: "/tenant/v1/tenants/{tenant_id}"
     };
   }
 
   // CheckQuota 检查配额
   rpc CheckQuota(CheckQuotaRequest) returns (CheckQuotaReply) {
     option (google.api.http) = {
-      post: "/v1/tenants/{tenant_id}/quota/check"
+      post: "/tenant/v1/tenants/{tenant_id}/quota/check"
       body: "*"
     };
   }
@@ -59,7 +59,7 @@ service Tenant {
   // ConsumeQuota 消费配额
   rpc ConsumeQuota(ConsumeQuotaRequest) returns (ConsumeQuotaReply) {
     option (google.api.http) = {
-      post: "/v1/tenants/{tenant_id}/quota/consume"
+      post: "/tenant/v1/tenants/{tenant_id}/quota/consume"
       body: "*"
     };
   }
@@ -67,7 +67,7 @@ service Tenant {
   // ReleaseQuota 释放配额
   rpc ReleaseQuota(ReleaseQuotaRequest) returns (ReleaseQuotaReply) {
     option (google.api.http) = {
-      post: "/v1/tenants/{tenant_id}/quota/release"
+      post: "/tenant/v1/tenants/{tenant_id}/quota/release"
       body: "*"
     };
   }
@@ -75,7 +75,7 @@ service Tenant {
   // ListProducts 列出产品线
   rpc ListProducts(ListProductsRequest) returns (ListProductsReply) {
     option (google.api.http) = {
-      get: "/v1/products"
+      get: "/tenant/v1/products"
     };
   }
 }
