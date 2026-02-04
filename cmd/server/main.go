@@ -70,14 +70,7 @@ func main() {
 		Output:   "stdout",
 		FilePath: "",
 	}
-	appLogger := logger.NewLogger(logCfg)
-	appLogger = log.With(appLogger,
-		"ts", log.DefaultTimestamp,
-		"caller", log.DefaultCaller,
-		"service.id", id,
-		"service.name", Name,
-		"service.version", Version,
-	)
+	appLogger, _ := logger.InitLogger(logCfg, id, Name, Version)
 
 	app, cleanup, err := wireApp(bc.Server, bc.Data, appLogger)
 	if err != nil {
