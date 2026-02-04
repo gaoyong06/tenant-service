@@ -2,8 +2,6 @@ module tenant-service
 
 go 1.25.1
 
-toolchain go1.25.1
-
 require (
 	github.com/envoyproxy/protoc-gen-validate v1.2.1
 	github.com/gaoyong06/go-pkg v0.0.0-20251124073010-648037637cb1
@@ -31,6 +29,8 @@ require (
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
+	go.uber.org/zap v1.27.1 // indirect
 	golang.org/x/net v0.48.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/sys v0.39.0 // indirect
@@ -39,5 +39,3 @@ require (
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace github.com/gaoyong06/go-pkg => ../go-pkg
